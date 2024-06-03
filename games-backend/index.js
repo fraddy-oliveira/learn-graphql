@@ -4,6 +4,10 @@ import { typeDefs } from "./schema.js";
 
 import database from "./_db.js";
 
+const DB_NEXT_ID = {
+  game: database.games.length + 1,
+};
+
 const resolvers = {
   Query: {
     games() {
@@ -46,6 +50,19 @@ const resolvers = {
     },
   },
   Mutation: {
+    addGame(_, args) {
+      const newGame = {
+        id: DB_NEXT_ID.game,
+        title: args.game.title,
+        platform: args.game.platform,
+      };
+
+      database.games.push(newGame);
+
+      DB_NEXT_ID.game = newGame.id + 1;
+
+      return database.games.find((g) => g.id === newGame.id);
+    },
     deleteGame(_, args) {
       database.games = database.games.filter((game) => game.id !== args.id);
 
