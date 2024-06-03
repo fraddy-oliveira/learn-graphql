@@ -63,6 +63,19 @@ const resolvers = {
 
       return database.games.find((g) => g.id === newGame.id);
     },
+    updateGame(_, args) {
+      const gameIndex = database.games.findIndex((g) => g.id === args.id);
+
+      if (gameIndex < 0) {
+        return null;
+      }
+
+      if (args.game?.title) {
+        database.games[gameIndex].title = args.game.title;
+      }
+
+      return database.games[gameIndex];
+    },
     deleteGame(_, args) {
       database.games = database.games.filter((game) => game.id !== args.id);
 
